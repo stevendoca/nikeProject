@@ -29,12 +29,28 @@ const ShopLink = styled(Paper)(() => ({
     transition: "all 0.75",
   },
 }));
-const MoreNike = (props) => {
+const titleMoreNike = "MoreNike";
+
+const dataMoreNike = [
+  {
+    img: "https://static.nike.com/a/images/f_auto/dpr_2.0/w_587,c_limit/a8c6d7f6-6d2f-46af-b9bd-8be808dda1cf/nike-just-do-it.jpg",
+    titleButton: "Men's",
+  },
+  {
+    img: "https://static.nike.com/a/images/f_auto/dpr_2.0/w_587,c_limit/595336c7-94a3-4a5e-ad6d-65a1f6ae82da/nike-just-do-it.jpg",
+    titleButton: "Women's",
+  },
+  {
+    img: "https://static.nike.com/a/images/f_auto/dpr_2.0/w_587,c_limit/d0ca9b63-2a15-41eb-8c86-8d121987f715/nike-just-do-it.jpg",
+    titleButton: "Kid's",
+  },
+];
+const MoreNike = () => {
   return (
     <div>
-      <Item>{props.titleMoreNike}</Item>
+      <Item>{titleMoreNike}</Item>
       <Grid container spacing={3}>
-        {props.dataMoreNike.map((item, index) => {
+        {dataMoreNike.map((item, index) => {
           return (
             <Grid item xs={12} sm={4} key={index}>
               <ContentLink>

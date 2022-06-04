@@ -9,3 +9,15 @@ export const notifySuccess = (str) => {
 export const notifyError = (str) => {
   toast.error("🦄" + str.toUpperCase());
 };
+export const checkDuplicateAndReturnIndex = (payload, arr) => {
+  for (const i in arr) {
+    if (
+      arr[i].id === payload.id &&
+      arr[i].color === payload.color &&
+      arr[i].size === payload.size
+    ) {
+      return i;
+    }
+  }
+  return null;
+};

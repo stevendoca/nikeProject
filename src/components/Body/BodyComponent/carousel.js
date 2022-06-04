@@ -22,7 +22,11 @@ const useStyles = makeStyles()((theme) => {
     },
   };
 });
-const Carousel = (props) => {
+const carouselImg = [
+  "https://static.nike.com/a/images/f_auto/dpr_2.0/w_1792,c_limit/5d61a8a7-21bd-4850-8ef7-0947c58dfc19/nike-kids.png",
+  "https://static.nike.com/a/images/f_auto/dpr_1.0/w_1229,c_limit/e04d1808-9792-46ba-bcbd-3b2302a40b31/nike-by-you-custom-shoes.jpg",
+];
+const Carousel = () => {
   const classes = useStyles();
   const settings = {
     dots: true,
@@ -34,7 +38,7 @@ const Carousel = (props) => {
   return (
     <Container maxWidth="1000">
       <Slider {...settings}>
-        {props.carouselImg?.map((item, index) => {
+        {carouselImg?.map((item, index) => {
           return (
             <Card key={index}>
               <CardActionArea>

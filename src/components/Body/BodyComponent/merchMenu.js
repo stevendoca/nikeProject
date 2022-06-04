@@ -40,7 +40,58 @@ const MerchMenuMobile = styled(Paper)(() => ({
   marginBottom: 20,
   boxShadow: "none",
 }));
-const MerchMenu = (props) => {
+const merch = [
+  {
+    id: 1,
+    heading: "Icons",
+    title1: "Air Force 1",
+    title2: "Huarache",
+    title3: "Air Max 90",
+    title4: "Air Max 95",
+    title5: "Air Max 97",
+    title6: "Air Max 270",
+    title7: "Air Max 720",
+    title8: "All Air Max",
+    title9: "Vapormax",
+  },
+  {
+    id: 2,
+    heading: "Shoes",
+    title1: "All Shoes",
+    title2: "Custom Shoes",
+    title3: "Jordan Shoes",
+    title4: "Running Shoes",
+    title5: "Basketball Shoes",
+    title6: "Football Shoes",
+    title7: "Gym & Training Shoes",
+    title8: "Lifestyle Shoes",
+  },
+  {
+    id: 3,
+    heading: "Clothing",
+    title1: "All Clothing",
+    title2: "Modest Wear",
+    title3: "Hoodies & Pullovers",
+    title4: "Shirts & Tops",
+    title5: "Jackets",
+    title6: "Compression & Nike Pro",
+    title7: "Trousers & Leggings",
+    title8: "Shorts",
+  },
+  {
+    id: 4,
+    heading: "Kid's",
+    title1: "Infant & Toddler Shoes",
+    title2: "Kids' Shoes",
+    title3: "Kids' Jordan Shoes",
+    title4: "Kids' Basketball Shoes",
+    title5: "Kids' Running Shoes",
+    title6: "Kids' Clothing",
+    title7: "Kids' Backpacks",
+    title8: "Kids' Socks",
+  },
+];
+const MerchMenu = () => {
   const [merchMenu, setMerchMenu] = useState(false);
   const [merchMobile, setMerchMobile] = useState(0);
   return (
@@ -54,7 +105,7 @@ const MerchMenu = (props) => {
             onMouseLeave={() => setMerchMenu(false)}
           >
             {" "}
-            {props.merch?.map((item, key) => {
+            {merch?.map((item, key) => {
               return (
                 <Grid key={key} item sm={3}>
                   <MenuTitle>{item.heading}</MenuTitle>
@@ -82,7 +133,7 @@ const MerchMenu = (props) => {
       </Hidden>
       {/* merchMenu for mobile */}
       <Hidden smUp>
-        {props.merch?.map((item, key) => {
+        {merch?.map((item, key) => {
           return (
             <div key={key}>
               <MenuItem

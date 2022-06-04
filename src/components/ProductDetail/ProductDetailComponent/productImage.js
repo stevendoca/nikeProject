@@ -37,11 +37,12 @@ const ProductImage = ({ detailProduct, index }) => {
     slidesToScroll: 1,
     autoplay: false,
   };
-  const isLoading = useSelector((state) => state.reducerURL.isLoading);
+  const isLoading = useSelector((state) => state.product.isLoading);
   let listLazyLoad = [];
   for (let i = 0; i < 6; i++) {
+    //should write a seperate function
     listLazyLoad.push(
-      <Grid item xs={6}>
+      <Grid item xs={6} key={i}>
         <Skeleton animation="wave">
           <img
             className={classes.productImage}
@@ -54,8 +55,6 @@ const ProductImage = ({ detailProduct, index }) => {
   return (
     <div>
       <Hidden smDown>
-        {" "}
-        {""}{" "}
         {isLoading ? (
           <Grid container className={classes.productContainer} spacing={2}>
             {listLazyLoad}
@@ -64,11 +63,9 @@ const ProductImage = ({ detailProduct, index }) => {
           <Grid container className={classes.productContainer} spacing={2}>
             {detailProduct.imgDetails[index].imgs.map((item, key) => {
               return (
-                <img
-                  className={classes.productImage}
-                  src={item.img}
-                  key={key}
-                />
+                <div key={key}>
+                  <img className={classes.productImage} src={item.img} />
+                </div>
               );
             })}
           </Grid>
@@ -87,9 +84,7 @@ const ProductImage = ({ detailProduct, index }) => {
                           component="img"
                           image={item.img}
                           title="Contemplative Reptile"
-                        >
-                          {""}
-                        </CardMedia>
+                        />
                       </CardActionArea>
                     </Skeleton>
                   ) : (
@@ -98,9 +93,7 @@ const ProductImage = ({ detailProduct, index }) => {
                         component="img"
                         item={item.img}
                         title="Contemplative Reptile"
-                      >
-                        {""}
-                      </CardMedia>
+                      />
                     </CardActionArea>
                   )}
                 </Card>

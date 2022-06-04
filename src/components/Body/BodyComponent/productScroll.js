@@ -59,9 +59,8 @@ const ProductType = styled(Paper)(() => ({
   color: "#757575",
 }));
 const ProductScroll = () => {
-  const data = useSelector((state) => state.reducerURL?.data);
-  console.log("data", data);
-  const isLoading = useSelector((state) => state.reducerURL?.isLoading);
+  const data = useSelector((state) => state.product?.data);
+  const isLoading = useSelector((state) => state.product?.isLoading);
   const listProduct = data.slice(0, 5).map((item, index) => {
     return (
       <Product key={index}>
@@ -91,7 +90,7 @@ const ProductScroll = () => {
         </Skeleton>
         <ProductDetailContainer>
           <ProductDetail>
-            <Skeleton>
+            <Skeleton width="70%">
               <ProductType>type</ProductType>
               <ProductType>name</ProductType>
             </Skeleton>

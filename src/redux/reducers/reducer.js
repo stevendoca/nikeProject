@@ -1,6 +1,9 @@
-import { combineReducers } from "redux";
-import reducerURL from "../../components/module/Reducer/reducer";
-const rootReducer = combineReducers({
-  reducerURL,
-});
-export default rootReducer;
+// import { combineReducers } from "redux";
+// import cartReducer from "../../components/Cart/Reducers/reducer";
+// import reducerURL from "../../components/ListProduct/module/Reducer/reducer";
+
+// const rootReducer = combineReducers({
+//   reducerURL,
+//   cartReducer,
+// });
+// export default rootReducer;

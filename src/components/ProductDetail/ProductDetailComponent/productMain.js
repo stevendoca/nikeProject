@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Alert, Grid, Skeleton } from "@mui/material";
-import * as action from "../../Cart/Action/action";
-import * as ActionType from "../../Cart/Content/content";
-import { notifyError, notifySuccess } from "../../../utils/utils";
+// import * as action from "../../Cart/Action/action";
+// import * as ActionType from "../../Cart/Content/content";
+import {
+  checkDuplicateAndReturnIndex,
+  notifyError,
+  notifySuccess,
+} from "../../../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
-
+import { addToCart, addToCartFavor } from "../../../features/cart/cartSlice";
+import { modalHandler } from "../../../features/product/productSlice";
+import ModalTransition from "./modal";
 const useStyles = makeStyles((theme) => ({
   ProductContainer: {
     padding: "0 44px",
@@ -135,13 +141,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
-  console.log("detail Product", detailProduct);
   const classes = useStyles();
   const [size, setSize] = useState("");
   const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [closeModal, setCloseModal] = useState(true);
+  const products = useSelector((state) => state.cart.products);
+  const modal = useSelector((state) => state.product.modalStatus);
   const dispatch = useDispatch();
+  // window.addEventListener("click", (event) => {
+  //   dispatch(modalHandler(false));
+  //   console.log("click");
+  // });
   const productDispatch = {
     id: detailProduct._id,
     name: detailProduct.name,
@@ -164,13 +175,16 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
     color: detailProduct.imgDetails[indexPress].color,
     img: detailProduct.imgDetails[indexPress].imgs[indexPress].img,
   };
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(products));
+  }, [products]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
   const handleChange = (e) => {
     const { value } = e.target;
     setSize(value);
@@ -184,13 +198,16 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
   };
   const addProduct = () => {
     if (size) {
-      handleOpen();
-      dispatch(
-        action.createAction({
-          type: ActionType.ADD_TO_CART,
-          payload: productDispatch,
-        })
-      );
+      // handleOpen();
+      dispatch(modalHandler(true));
+      // dispatch(
+      //   action.createAction({
+      //     type: ActionType.ADD_TO_CART,
+      //     payload: productDispatch,
+      //   })
+      // );
+      const indexItem = checkDuplicateAndReturnIndex(productDispatch, products);
+      dispatch(addToCart({ productDispatch, indexItem }));
     }
   };
   const checkSizeFavor = () => {
@@ -204,13 +221,13 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
     if (!userLocal) {
       notifyError("Please login");
     } else {
-      dispatch(
-        action.createAction({
-          type: ActionType.ADD_TO_CARD_FAVOR,
-          payload: favorProduct,
-        })
-      );
-      dispatch(action.postFavoriteCart());
+      // dispatch(
+      //   action.createAction({
+      //     type: ActionType.ADD_TO_CARD_FAVOR,
+      //     payload: favorProduct,
+      //   })
+      // );
+      dispatch(addToCartFavor(favorProduct));
     }
   };
   const listSize = detailProduct.sizes.map((item, index) => (
@@ -234,10 +251,10 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
       </label>
     </Grid>
   ));
-  const isLoading = useSelector((state) => state.reducerURL.isLoading);
+  const isLoading = useSelector((state) => state.product.isLoading);
   const listSizeLazyLoad = detailProduct.sizes.map((item, index) => (
     <Grid item xs={4} key={index}>
-      <Skeleton>
+      <Skeleton width="100%">
         <label>
           <input
             type="radio"
@@ -251,7 +268,7 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
     </Grid>
   ));
   return (
-    <Grid container className={classes.ProductContainer}>
+    <Grid container className={classes.ProductContainer} spacing={2}>
       <Grid item xs={8}>
         {isLoading ? (
           <Skeleton>
@@ -388,6 +405,13 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
           )}
         </Grid>
       </Grid>
+      <Grid />
+      <ModalTransition
+        // open={open}
+        // handleOpen={handleOpen}
+        // handleClose={handleClose}
+        productDisPatch={productDispatch}
+      />
     </Grid>
   );
 };

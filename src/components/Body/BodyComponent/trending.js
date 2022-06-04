@@ -43,13 +43,26 @@ const ShopLink = styled(Paper)(() => ({
     transition: "all 0.75",
   },
 }));
-const Trending = (props) => {
+const dataTrending = [
+  {
+    img: "https://static.nike.com/a/images/f_auto/dpr_1.0/h_700,c_limit/3bd36415-c20f-4521-9391-f60fe8beef8c/nike-just-do-it.jpg",
+    title: "LeBron 18 'Equation'",
+    button: "Shop",
+  },
+  {
+    img: "https://static.nike.com/a/images/f_auto/dpr_1.0/h_700,c_limit/16416ae4-9d79-4614-be7b-c41d8541f56b/nike-just-do-it.png",
+    title: "Sisterhood of Sport Collection",
+    button: "Shop",
+  },
+];
+const titleTrending = "Trending";
+const Trending = () => {
   return (
     <div>
-      <Item>{props.titleTrending}</Item>
+      <Item>{titleTrending}</Item>
       <div>
         <Grid container spacing={3}>
-          {props.dataTrending.map((item, index) => {
+          {dataTrending.map((item, index) => {
             return (
               <Grid item xs={12} md={6} key={index}>
                 <ContentLink href="#a">

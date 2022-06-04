@@ -27,20 +27,17 @@ const Body = (props) => {
     <div className={classes.body}>
       <div className={classes.bodyComponent}>
         <Div>
-          <Carousel carouselImg={props.carouselImg} />
+          <Carousel />
         </Div>
       </div>
       <div className={classes.bodyComponent}>
         <Div>
-          <Trending dataTrending={props.dataTrending} />
+          <Trending />
         </Div>
       </div>
       <div className={classes.bodyComponent}>
         <Div>
-          <MoreNike
-            titleMoreNike={props.titleMoreNike}
-            dataMoreNike={props.dataMoreNike}
-          />
+          <MoreNike />
         </Div>
       </div>
       <div className={classes.bodyComponent}>
@@ -50,7 +47,7 @@ const Body = (props) => {
       </div>
       <div className={classes.bodyComponent}>
         <Div>
-          <MerchMenu merch={props.merchMenu} />
+          <MerchMenu />
         </Div>
       </div>
     </div>
