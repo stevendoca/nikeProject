@@ -144,6 +144,7 @@ const CartSummary = () => {
         notifySuccess("order successful");
         localStorage.removeItem("cart");
         dispatch(resetCart());
+        history("/user/order");
       }, 2000);
     } catch (e) {
       notifyError("order fail");
@@ -172,7 +173,7 @@ const CartSummary = () => {
     console.log("products", products);
     const productsCopy = JSON.parse(JSON.stringify(products));
 
-    for (const item of products) {
+    for (const item of productsCopy) {
       console.log("item", item.message);
       delete item.message;
       delete item.sizes;
@@ -181,7 +182,7 @@ const CartSummary = () => {
     const userLocal = JSON.parse(localStorage.getItem("user"));
     const { token } = userLocal;
     const object = {
-      products: products,
+      products: productsCopy,
       isPaid: data.paid,
       description: "paypal;",
     };

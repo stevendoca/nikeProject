@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@mui/styles";
 import { Alert, Grid, Skeleton } from "@mui/material";
 // import * as action from "../../Cart/Action/action";
 // import * as ActionType from "../../Cart/Content/content";
@@ -12,14 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, addToCartFavor } from "../../../features/cart/cartSlice";
 import { modalHandler } from "../../../features/product/productSlice";
 import ModalTransition from "./modal";
+import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   ProductContainer: {
     padding: "0 44px",
     fontSize: 16,
     lineHeight: 1.7,
-    // [theme.breakpoints.down("md")]: {
-    //   padding: "0 8px",
-    // },
+    [theme.breakpoints.down("md")]: {
+      padding: "0 8px",
+    },
   },
   ProductImage: {
     width: "100%",
@@ -304,6 +304,7 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
             {isLoading ? (
               <Skeleton>
                 <img
+                  alt="item"
                   src={item.imgs[0].img}
                   className={classes.ProductColorwayImage}
                 />
@@ -327,7 +328,11 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
         );
       })}
       <Grid item xs={12}>
-        <Grid container className={classes.Size} spacing={2}>
+        <Grid
+          container
+          className={`${classes.Size} ${flag ? classes.CheckSize : ""}`}
+          spacing={2}
+        >
           {" "}
           <Grid
             item
@@ -337,7 +342,6 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
             {" "}
             {isLoading ? (
               <Skeleton width="100%">
-                {" "}
                 <span>Select Size</span>
               </Skeleton>
             ) : (

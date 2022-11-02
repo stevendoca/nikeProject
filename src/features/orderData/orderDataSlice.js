@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-let initialState = {
+const initialState = {
   dataOrder: [],
   dataProcess: [],
   dataDelivered: [],
 };
 export const OrderDataSlice = createSlice({
-  name: "order data",
+  name: "orderdata",
   initialState,
   reducers: {
     dataOrderReducer: (state, action) => {
@@ -20,6 +20,10 @@ export const OrderDataSlice = createSlice({
     },
   },
 });
-export const { dataOrderReducer, dataDeliverReducer, dataProcessReducer } =
-  OrderDataSlice.actions;
+export const {
+  dataOrderReducer,
+  dataDeliverReducer,
+  dataProcessReducer,
+  testReducer,
+} = OrderDataSlice.actions;
 export default OrderDataSlice.reducer;

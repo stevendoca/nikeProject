@@ -4,14 +4,18 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { MenuItem, Skeleton } from "@mui/material";
 import { Hidden } from "@mui/material";
+import { makeStyles } from "@material-ui/core";
+import "animate.css";
 
 const MerchMenus = styled("div")(({ theme }) => ({
-  width: 880,
+  width: 888,
   margin: "auto",
+  transitionDuration: "3s",
   [theme.breakpoints.down("sm")]: {
     width: "100%",
   },
 }));
+const useStyles = makeStyles((theme) => ({}));
 const MenuTitle = styled(Paper)(() => ({
   display: "block",
   marginBottom: 24,
@@ -23,7 +27,7 @@ const MenuTitle = styled(Paper)(() => ({
     color: "black",
   },
 }));
-const menuItem = styled(Paper)(() => ({
+const MenuItemStyles = styled(Paper)(() => ({
   display: "block",
   color: "#757575",
   marginBottom: 12,
@@ -91,38 +95,65 @@ const merch = [
     title8: "Kids' Socks",
   },
 ];
+
 const MerchMenu = () => {
   const [merchMenu, setMerchMenu] = useState(false);
   const [merchMobile, setMerchMobile] = useState(0);
+  const [showMobile, setShowMobile] = useState(false);
+  const classes = useStyles();
   return (
     <div>
-      <Hidden xsDown>
+      <Hidden smDown>
         <MerchMenus>
           <Grid
             container
             spacing={3}
             onMouseEnter={() => setMerchMenu(true)}
             onMouseLeave={() => setMerchMenu(false)}
+            className={classes.MerchMenus}
           >
-            {" "}
             {merch?.map((item, key) => {
               return (
                 <Grid key={key} item sm={3}>
-                  <MenuTitle>{item.heading}</MenuTitle>
-                  <MenuItem>{item.title1}</MenuItem>
-                  <MenuItem>{item.title2}</MenuItem>
-                  <MenuItem>{item.title3}</MenuItem>
-                  <MenuItem>{item.title4}</MenuItem>
+                  <MenuTitle>{item.heading}hi</MenuTitle>
+                  <MenuItem>
+                    <MenuItemStyles>{item.title1}</MenuItemStyles>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuItemStyles>{item.title2}</MenuItemStyles>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuItemStyles>{item.title3}</MenuItemStyles>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuItemStyles>{item.title4}</MenuItemStyles>
+                  </MenuItem>
                   {merchMenu && (
-                    <div>
-                      <MenuItem>{item.title5}</MenuItem>
-                      <MenuItem>{item.title6}</MenuItem>
-                      <MenuItem>{item.title7}</MenuItem>
-                      <MenuItem>{item.title8}</MenuItem>
-                      <MenuItem>{item.title9}</MenuItem>
-                      <MenuItem>{item.title10}</MenuItem>
-                      <MenuItem>{item.title11}</MenuItem>
-                      <MenuItem>{item.title12}</MenuItem>
+                    <div className="animate__animated animate__fadeInDown">
+                      <MenuItem>
+                        <MenuItemStyles>{item.title5}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title6}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title7}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title8}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title9}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title10}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title11}</MenuItemStyles>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuItemStyles>{item.title12}</MenuItemStyles>
+                      </MenuItem>
                     </div>
                   )}
                 </Grid>
@@ -131,35 +162,64 @@ const MerchMenu = () => {
           </Grid>
         </MerchMenus>
       </Hidden>
+
       {/* merchMenu for mobile */}
       <Hidden smUp>
         {merch?.map((item, key) => {
           return (
             <div key={key}>
-              <MenuItem
-                onClick={() =>
-                  setMerchMobile((prevState) => ({
-                    show: !prevState.show,
-                    index: key + 1,
-                  }))
-                }
+              <a
+                href="#a"
+                onClick={() => {
+                  setMerchMobile(key + 1);
+                  setShowMobile((prev) => !prev);
+                }}
               >
-                {item.heading}
-              </MenuItem>
-              {merchMobile.show && merchMobile.index === key + 1 && (
+                <MenuTitle>{item.heading}</MenuTitle>
+              </a>
+              {showMobile && merchMobile === key + 1 && (
                 <MerchMenuMobile>
-                  <MenuItem>{item.title1}</MenuItem>
-                  <MenuItem>{item.title2}</MenuItem>
-                  <MenuItem>{item.title3}</MenuItem>
-                  <MenuItem>{item.title4}</MenuItem>
-                  <MenuItem>{item.title5}</MenuItem>
-                  <MenuItem>{item.title6}</MenuItem>
-                  <MenuItem>{item.title7}</MenuItem>
-                  <MenuItem>{item.title8}</MenuItem>
-                  <MenuItem>{item.title9}</MenuItem>
-                  <MenuItem>{item.title10}</MenuItem>
-                  <MenuItem>{item.title11}</MenuItem>
-                  <MenuItem>{item.title12}</MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title1}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title2}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title3}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title4}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title5}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title6}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuTitle>
+                      <a href="#a">{item.title7}</a>
+                    </MenuTitle>
+                  </MenuItem>
+                  <MenuItem>
+                    <a href="#a">{item.title8}</a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a href="#a">{item.title9}</a>
+                  </MenuItem>
                 </MerchMenuMobile>
               )}
             </div>

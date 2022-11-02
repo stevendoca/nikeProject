@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import API from "../../../Axios/API";
@@ -7,8 +7,11 @@ import {
   dataDeliverReducer,
   dataOrderReducer,
   dataProcessReducer,
+  testReducer,
 } from "../../../features/orderData/orderDataSlice";
 import OrderStepper from "./OrderStepper";
+import moment from "moment";
+import { notifyError, notifySuccess } from "../../../utils/utils";
 
 const useStyles = makeStyles({
   Container: {
@@ -96,11 +99,52 @@ const UserOrder = () => {
   const dataOrder = useSelector((state) => state.orderData.dataOrder);
   const dataProcess = useSelector((state) => state.orderData.dataProcess);
   const dataDelivered = useSelector((state) => state.orderData.dataDelivered);
+  const [dataProcessClick, setDataProcessClick] = useState(0);
+  const [dataDeliveredClick, setDataDeliveredClick] = useState(0);
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useNavigate();
 
+  const handleOrderClick = (index) => {
+    if (index === dataProcessClick) {
+      setDataProcessClick(-1);
+    } else {
+      setDataProcessClick(index);
+    }
+  };
+  const handleDeliveredClick = (index) => {
+    if (index === dataDeliveredClick) {
+      setDataDeliveredClick(-1);
+    } else {
+      setDataDeliveredClick(index);
+    }
+  };
+  const cancelOrderAPI = async (data, token) => {
+    try {
+      await API(`cart/delete`, "DELETE", { _id: data }, token);
+      notifySuccess("CANCEL ORDER ID" + data);
+    } catch (e) {
+      console.log({ ...e });
+      notifyError("Fail To Cancel Order");
+    }
+  };
+  const handleCancel = (id) => {
+    const token = JSON.parse(localStorage.getItem("user")).token;
+    cancelOrderAPI(id, token);
+    const index = dataProcess.findIndex((item) => {
+      return item._id === id;
+    });
+    dataProcess.splice(index, 1);
+  };
+  const convertDay = (date) => {
+    return moment(date).format("LLLL");
+  };
+  // useEffect(() => {
+  //   for (let i = 0; i < dataProcess.length; i++) {
+  //     console.log("data Process", dataProcess[i].products);
+  //   }
+  // }, [dataProcess]);
   useEffect(() => {
     const callAPI = async () => {
       try {
@@ -115,9 +159,10 @@ const UserOrder = () => {
             dataDeliveredStore.push(res.data[i]);
           }
         }
-        dataOrderReducer(res.data);
-        dataProcessReducer(dataProcessStore);
-        dataDeliverReducer(dataDeliveredStore);
+        dispatch(dataOrderReducer(res.data));
+        dispatch(dataProcessReducer(dataProcessStore));
+        dispatch(dataDeliverReducer(dataDeliveredStore));
+        console.log("dataProcess", dataProcess);
       } catch (e) {
         console.log("e", e);
       }
@@ -125,7 +170,148 @@ const UserOrder = () => {
     callAPI();
   }, []);
 
-  return <div>UserOrder</div>;
+  return (
+    <div className={classes.Container}>
+      <div className={classes.Title}>Your Order</div>
+      <div>
+        <div className={classes.OrderType}>Processing Order</div>
+        <div>
+          {dataProcess.map((item, index) => {
+            return (
+              <button className={classes.Order} key={index}>
+                <div
+                  className={classes.OrderHeader}
+                  onClick={() => {
+                    handleOrderClick(index);
+                  }}
+                >
+                  <div className={classes.OrderStatus}>
+                    <OrderStepper status={item.status} />
+                  </div>
+                  <div className={classes.OrderInfo}>ID:{item._id}</div>
+                  <div className={classes.OrderInfo}>
+                    Date:{convertDay(item.updatedAt)}
+                  </div>
+                  {item.isPayed === true ? (
+                    <div className={classes.OrderInfo}>
+                      <b>Payment: Paypal</b>
+                    </div>
+                  ) : (
+                    <div className={classes.OrderInfo}>
+                      <b>Payment:Ship COD</b>
+                    </div>
+                  )}
+                  {item.status === 1 && item.isPayed !== true && (
+                    <div
+                      className={classes.OrderCancel}
+                      onClick={() => handleCancel(item._id)}
+                    >
+                      Cancel Order
+                    </div>
+                  )}
+                </div>
+
+                {item.products.map((item1, index1) => {
+                  return (
+                    <div key={index1}>
+                      {dataProcessClick === index && (
+                        <div className={classes.OrderProduct}>
+                          <a
+                            href="#a"
+                            className={classes.ProductImageContainer}
+                          >
+                            {" "}
+                            <img
+                              alt=""
+                              className={classes.ProductImage}
+                              src={item1.img}
+                            />
+                          </a>
+                          <div className={classes.ProductDetail}>
+                            <a href="#a" className={classes.ProductName}>
+                              {item1.name}
+                            </a>
+                            <div className={classes.Price}>
+                              {item1.price.toLocaleString()}
+                            </div>
+                            <div className={classes.SubDetail}>
+                              <div>Size:{item1.size}</div>
+                              <div>Quantity:{item1.quantity}</div>
+                              <div>Color:{item1.color}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div>
+        <div className={classes.OrderType}>Delivered Order</div>
+        <div>
+          {dataDelivered.map((item, index) => {
+            return (
+              <button className={classes.Order} key={index}>
+                <div
+                  className={classes.OrderHeader}
+                  onClick={() => {
+                    handleDeliveredClick(index);
+                  }}
+                >
+                  <div className={classes.OrderStatus}>
+                    <OrderStepper status={item.status} />
+                  </div>
+                  <div className={classes.OrderInfo}>ID:{item._id}</div>
+                  <div className={classes.OrderInfo}>Date:{item.updatedAt}</div>
+                </div>
+                {item.products.map((item1, index1) => {
+                  return (
+                    <div key={index1}>
+                      {dataDeliveredClick == index && (
+                        <div key={index1}>
+                          {dataDeliveredClick === index && (
+                            <div className={classes.OrderProduct}>
+                              <a
+                                href="#a"
+                                className={classes.ProductImageContainer}
+                              >
+                                <img
+                                  alt=""
+                                  className={classes.ProductImage}
+                                  src={item1.img}
+                                />
+                              </a>
+                              <div className={classes.ProductDetail}>
+                                <a href="#a" className={classes.ProductName}>
+                                  {item1.name}
+                                </a>
+                                <div className={classes.Price}>
+                                  {item1.price.toLocaleString()}
+                                </div>
+                                <div className={classes.SubDetail}>
+                                  <div>Size:{item1.size}</div>
+                                  <div>Quantity:{item1.quantity}</div>
+                                  <div>Color:{item1.color}</div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default UserOrder;

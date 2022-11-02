@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 // import * as action from "../../components/ListProduct/module/Action/action";
 import Maincomponent from "../../components/maincomponent";
 import {
-  changeGenderTypeProduct,
   fetchAPIListProduct,
   isLoadingListProduct,
 } from "../../features/product/productSlice";
 import API from "../../Axios/API";
+import Footer from "../../components/Footer/Footer";
 const HomePage = () => {
   const dispatch = useDispatch();
   const getProductAPIHandler = async (gender, typeProduct) => {
@@ -19,7 +19,7 @@ const HomePage = () => {
       );
 
       dispatch(fetchAPIListProduct(res.data));
-      dispatch(isLoadingListProduct, false);
+      dispatch(isLoadingListProduct(false));
       localStorage.setItem(
         "GenderAndTypeProduct",
         JSON.stringify({ gender: gender, typeProduct: typeProduct })

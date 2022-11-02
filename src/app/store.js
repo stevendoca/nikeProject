@@ -1,16 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { initialState as productInitialState } from "../features/product/productSlice";
-import { saveState, loadState } from "../common/localStorage/localStorage";
 import cartReducer from "../features/cart/cartSlice";
 import productReducer from "../features/product/productSlice";
 import navBarReducer from "../features/navBar/navBarSlice,";
 import orderDataReducer from "../features/orderData/orderDataSlice";
 import { combineReducers } from "redux";
+import userReducer from "../features/user/userSlice";
+import signInAndSignUpReducer from "../features/SignInAndSignUpSlice/signInAndSignUpSlice";
+import signInUpReducer from "../features/SignInUp/signInUpSlice";
 const rootReducer = combineReducers({
   product: productReducer,
   cart: cartReducer,
   navBar: navBarReducer,
   orderData: orderDataReducer,
+  user: userReducer,
+  // signInAndSignUp: signInAndSignUpReducer,
+  signInUp: signInUpReducer,
 });
 
 // const preloadedState = {

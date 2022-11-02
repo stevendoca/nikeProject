@@ -1,6 +1,8 @@
+import { Box, Divider, Grid } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import { makeStyles } from "tss-react/mui";
+import Footer from "../Footer/Footer";
 
 import Carousel from "./BodyComponent/carousel";
 import MerchMenu from "./BodyComponent/merchMenu";
@@ -9,12 +11,12 @@ import ProductScroll from "./BodyComponent/productScroll";
 import Trending from "./BodyComponent/trending";
 
 const Div = styled.div`
-  margin-top: 84px;
+  margin-top: 64px;
 `;
 const useStyles = makeStyles()((theme) => {
   return {
     bodyComponent: {
-      marginTop: 84,
+      marginTop: 24,
     },
     body: {
       padding: "0 44px 50px",

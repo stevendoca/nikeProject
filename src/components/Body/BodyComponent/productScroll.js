@@ -4,11 +4,15 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { Skeleton } from "@mui/material";
 import { Link } from "react-router-dom";
-const Title = styled(Paper)(() => ({ fontSize: 24, marginBottom: 32 }));
+const Title = styled(Paper)(() => ({
+  fontSize: 24,
+  marginBottom: 32,
+  boxShadow: "none",
+}));
 const Container = styled(Paper)(() => ({
   padding: 0,
   whiteSpace: "nowrap",
-  overflowX: "hidden",
+  overflowX: "scroll",
   cursor: "pointer",
   "&:hover": {
     overflowX: "scroll",
@@ -27,6 +31,7 @@ const Container = styled(Paper)(() => ({
     webkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.3)",
     backgroundColor: "#757575",
   },
+  boxShadow: "none",
 }));
 const Product = styled(Paper)(() => ({
   width: 390,
@@ -34,6 +39,7 @@ const Product = styled(Paper)(() => ({
   display: "inline-block",
   marginRight: 20,
   marginBottom: 40,
+  boxShadow: "none",
 }));
 const ProductImage = styled(Paper)(() => ({
   "&:hover": {
@@ -41,6 +47,7 @@ const ProductImage = styled(Paper)(() => ({
   },
   width: "100%",
   transition: "opacity 1s",
+  boxShadow: "none",
 }));
 const ProductDetailContainer = styled(Paper)(() => ({
   fontSize: 16,
@@ -48,15 +55,19 @@ const ProductDetailContainer = styled(Paper)(() => ({
   marginTop: 12,
   lineHeight: 1.5,
   whiteSpace: "normal",
+  boxShadow: "none",
 }));
 const ProductDetail = styled(Paper)(() => ({
   flex: "0 0 300px",
+  boxShadow: "none",
 }));
 const Price = styled(Paper)(() => ({
   flex: "1 1 auto",
+  boxShadow: "none",
 }));
 const ProductType = styled(Paper)(() => ({
   color: "#757575",
+  boxShadow: "none",
 }));
 const ProductScroll = () => {
   const data = useSelector((state) => state.product?.data);
@@ -66,7 +77,7 @@ const ProductScroll = () => {
       <Product key={index}>
         <Link to={{ pathname: `/detailProduct/${item._id}` }}>
           <ProductImage>
-            <img src={item.img} width={340} />
+            <img src={item.img} width={340} height={346} alt="productScroll" />
           </ProductImage>
         </Link>
         <ProductDetailContainer>
@@ -74,7 +85,7 @@ const ProductScroll = () => {
             <ProductType>{item.name}</ProductType>
             <ProductType>{item.message}</ProductType>
           </ProductDetail>
-          <Price>{item.price.toLocaleString()}$</Price>
+          <Price>${item.price.toLocaleString()}</Price>
         </ProductDetailContainer>
       </Product>
     );

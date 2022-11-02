@@ -12,7 +12,6 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      console.log("action payload", action.payload);
       if (action.payload.indexItem) {
         state.products[action.payload.indexItem].quantity += 1;
       } else {

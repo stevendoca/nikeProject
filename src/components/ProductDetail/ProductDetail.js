@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../../Axios/API";
 
-import { Grid, Hidden, Skeleton } from "@mui/material";
+import { Box, Grid, Hidden, Skeleton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ProductImage from "./ProductDetailComponent/productImage";
 import { useDispatch, useSelector } from "react-redux";
@@ -115,7 +115,7 @@ const ProductDetail = (props) => {
       <div>
         {isLoading ? (
           <div>
-            <Hidden mdUp>
+            <Hidden mdup>
               <ProductImage detailProduct={dataLazyLoad} index={0} />
             </Hidden>
 
@@ -141,11 +141,12 @@ const ProductDetail = (props) => {
           <div>
             {detailProduct && (
               <div>
-                <Hidden mdUp>
+                <Box sx={{ display: { sx: "block", md: "none" } }}>
                   <ProductImage detailProduct={detailProduct} index={index} />
-                </Hidden>
+                  <h1>HII</h1>
+                </Box>
                 <Grid container spacing={2}>
-                  <Hidden smDown>
+                  <Hidden mdDown>
                     <Grid item sm={12} md={8}>
                       <ProductImage
                         detailProduct={detailProduct}
@@ -153,7 +154,7 @@ const ProductDetail = (props) => {
                       />
                     </Grid>
                   </Hidden>
-                  <Grid item sm={12} md={4}>
+                  <Grid item sm={12} md={4} sx={{ marginTop: 5 }}>
                     <ProductMain
                       detailProduct={detailProduct}
                       getIndexImg={getIndexImg}
