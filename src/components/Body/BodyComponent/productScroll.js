@@ -71,6 +71,7 @@ const ProductType = styled(Paper)(() => ({
 }));
 const ProductScroll = () => {
   const data = useSelector((state) => state.product?.data);
+  console.log("data", data);
   const isLoading = useSelector((state) => state.product?.isLoading);
   const listProduct = data.slice(0, 5).map((item, index) => {
     return (

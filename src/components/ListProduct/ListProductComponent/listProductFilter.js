@@ -496,6 +496,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Skeleton from "@material-ui/lab/Skeleton";
 import {
+  filterColorData,
   filterColorHandler,
   filterSizeHandler,
 } from "../../../features/product/productSlice";
@@ -592,19 +593,23 @@ function ListProductFilter(props) {
 
   //call data từ store
   const filterColor = useSelector((state) => state.product.filterColor);
-  console.log("filterColorOnTop", filterColor);
+  console.log("filterColor", filterColor);
+
   const filterSize = useSelector((state) => state.product.filterSize);
+  console.log("filterSize", filterSize);
   const data = useSelector((state) => state.product.data);
   const isLoading = useSelector((state) => state.product.isLoading);
 
   //handle array color
   const clickFilterColor = (filter) => {
-    if (filter !== "") {
+    if (filter) {
       if (filterColor.indexOf(filter) > -1) {
         const temp = JSON.parse(JSON.stringify(filterColor));
         temp.splice(filterColor.indexOf(filter), 1);
         dispatch(filterColorHandler(temp));
+        props.handleFilter("");
       } else {
+        props.handleFilter(filter);
         const temp = JSON.parse(JSON.stringify(filterColor));
 
         temp.push(filter);
@@ -618,17 +623,30 @@ function ListProductFilter(props) {
 
   //handle array size
   const clickFilterSize = (filter) => {
-    if (filterSize.indexOf(filter) > -1) {
-      const temp = JSON.parse(JSON.stringify(filterSize));
-      temp.splice(filterSize.indexOf(filter), 1);
-      dispatch(filterSizeHandler(temp));
+    if (filter) {
+      if (filterSize.indexOf(filter) > -1) {
+        const temp = JSON.parse(JSON.stringify(filterSize));
+        temp.splice(filterSize.indexOf(filter), 1);
+        dispatch(filterSizeHandler(temp));
+        props.handleFilter("");
+      } else {
+        props.handleFilter(filter);
+        const temp = JSON.parse(JSON.stringify(filterSize));
+        temp.push(filter);
+        dispatch(filterSizeHandler(temp));
+      }
     } else {
-      const temp = JSON.parse(JSON.stringify(filterSize));
-      temp.push(filter);
-      dispatch(filterSizeHandler(temp));
+      dispatch(filterColorHandler([]));
+      dispatch(filterSizeHandler([]));
     }
   };
-
+  const clickFilterGender = (genderInput) => {
+    const tempData = data;
+    const filterDataByGender = tempData.filter(
+      (item) => item.gender === genderInput
+    );
+    dispatch(filterColorData(filterDataByGender));
+  };
   //collect size
   var mySize = new Set();
   var Size = [];
@@ -648,7 +666,6 @@ function ListProductFilter(props) {
           className={classes.size}
           onClick={() => {
             clickFilterSize(item);
-            props.handleFilter(item);
           }}
         >
           {item}
@@ -700,8 +717,7 @@ function ListProductFilter(props) {
       xs={4}
       className={classes.ColorContainer}
       onClick={async () => {
-        await clickFilterColor(item);
-        props.handleFilter(item);
+        clickFilterColor(item);
       }}
     >
       {item === "white" ? (
@@ -789,6 +805,9 @@ function ListProductFilter(props) {
                   control={<BlackCheckbox />}
                   label="Men"
                   className={classes.FilterCheckboxLabel}
+                  onClick={() => {
+                    clickFilterGender("male");
+                  }}
                 />
               </div>
               <div>
@@ -796,6 +815,9 @@ function ListProductFilter(props) {
                   control={<BlackCheckbox />}
                   label="Women"
                   className={classes.FilterCheckboxLabel}
+                  onClick={() => {
+                    clickFilterGender("female");
+                  }}
                 />
               </div>
             </div>

@@ -10,6 +10,7 @@ import {
   changeGenderTypeProduct,
   fetchAPIListProduct,
   filterColorData,
+  filterData,
   isLoadingListProduct,
   sortByTitleReducer,
   sortData,
@@ -152,13 +153,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 const ListProduct = () => {
   const classes = useStyles();
+  const [sort, setSort] = useState("");
+  const [filter, setFilter] = useState({
+    typeProduct: [],
+    gender: [],
+    listColor: [],
+  });
+  const [open, setOpen] = useState("");
+  const handleToggleOpen = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
   const [hideFilter, setHideFilter] = useState(false);
   const [sortBy, setSortBy] = useState(false);
   const gender = useSelector((state) => state.product.gender);
+  console.log("gender", gender);
   const typeProduct = useSelector((state) => state.product.typeProduct);
+  console.log("products", typeProduct);
   const data = useSelector((state) => state.product.data);
+  console.log("data", data);
   const dataSearchList = useSelector((state) => state.product.dataSearchList);
   const dataSearchInput = useSelector((state) => state.product.dataSearchInput);
+
   const GenderAndTypeProduct = {
     gender: gender,
     typeProduct: typeProduct,
@@ -166,63 +181,24 @@ const ListProduct = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const callAPI = async () => {
-      try {
-        if (gender === "search" && typeProduct === "search") {
-          const res = await API(`product`, "GET");
-          const allData = res.data;
-          const dataSearch = allData.filter((item, index) => {
-            return (
-              item.name.toLowerCase().indexOf(dataSearchInput.toLowerCase()) >
-              -1
-            );
-          });
-          dispatch(fetchAPIListProduct(dataSearch));
-        } else {
-          dispatch(isLoadingListProduct(true));
-          const res = await API(
-            `product/?gender=${gender}&typeProduct=${typeProduct}`,
-            "GET"
-          );
-          dispatch(fetchAPIListProduct(res.data));
-          dispatch(isLoadingListProduct(false));
-        }
-        localStorage.setItem(
-          "GenderAndTypeProduct",
-          JSON.stringify(GenderAndTypeProduct)
-        );
-      } catch (e) {
-        console.log("e", e);
-      }
-      return () => {
-        changeGenderTypeProduct({ gender: null, typeProduct: null });
-      };
-    };
-    callAPI();
-  }, [gender, typeProduct, dataSearchList]);
   const filterColor = useSelector((state) => state.product.filterColor);
-  useEffect(() => {
-    console.log("filterColor List", filterColor);
-  }, [filterColor]);
+
   const filterSize = useSelector((state) => state.product.filterSize);
   const dataSort = useSelector((state) => state.product.dataSort);
 
   const dataFilter = useSelector((state) => state.product.dataFilter);
 
   const sortByTitle = useSelector((state) => state.product.sortByTitle);
+  const [triggerHandleFilter, setTriggerHandlerFilter] = useState("");
 
-  const handleFilter = (filter) => {
-    console.log("filter Color", filterColor);
+  const handleFilter = () => {
     var sortData = [];
     for (let i = 0; i < dataSort.length; i++) {
       sortData.push(dataSort[i]);
     }
 
-    dispatch(filterColorData(dataSort));
-    if (filter === "") {
-      dispatch(filterColorData(data));
-    } else {
+    dispatch(filterData(dataSort));
+    if (triggerHandleFilter) {
       if (sortData) {
         if (filterColor.length > 0) {
           for (let i = 0; i < filterColor.length; i++) {
@@ -237,7 +213,7 @@ const ListProduct = () => {
               }
             });
             sortData = colors;
-            dispatch(filterColorData(colors));
+            dispatch(filterData(colors));
           }
         }
         if (filterSize.length > 0) {
@@ -250,12 +226,30 @@ const ListProduct = () => {
               }
             });
             sortData = sizes;
-            dispatch(filterColorData(sizes));
+            dispatch(filterData(sizes));
           }
         }
       }
     }
   };
+  useEffect(() => {
+    console.log("go Effectt");
+    const callingAPI = async () => {
+      console.log("abc");
+      dispatch(isLoadingListProduct(true));
+      const res = await API(
+        `product/?gender=${gender}&typeProduct=${typeProduct}`,
+        "GET"
+      );
+      console.log("res", res);
+      dispatch(fetchAPIListProduct(res.data));
+      dispatch(isLoadingListProduct(false));
+    };
+    callingAPI();
+  }, [gender, typeProduct]);
+  useEffect(() => {
+    console.log("testing");
+  }, []);
   const handleFeature = () => {
     dispatch(sortData(data));
     dispatch(filterColorData(data));
@@ -308,6 +302,52 @@ const ListProduct = () => {
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+  const getValue = (value) =>
+    typeof value === "string" ? value.toUpperCase() : value;
+
+  const filterPlainArray = (array, filters) => {
+    const filterKeys = Object.keys(filters);
+    console.log("array", array);
+    console.log("filter", filter);
+    return array.filter((item) => {
+      return filterKeys.every((key) => {
+        if (!filters[key].length) return true;
+        if (key !== "gender") {
+          return filters[key].find((filter) => {
+            return getValue(item[key]).includes(getValue(filter));
+          });
+        } else {
+          return filters[key].find((filter) => {
+            return getValue(item[key]) === getValue(filter);
+          });
+        }
+      });
+    });
+  };
+
+  const handleSort = () => {
+    console.log("go handle Sort");
+    console.log("sort", sort);
+    console.log("data", data);
+    console.log("filter", filter);
+
+    switch (sort) {
+      case "Price: High-Low":
+        console.log("go case 1");
+        return filterPlainArray(data, filter).sort((a, b) => b.price - a.price);
+      case "Price: Low-High":
+        console.log("go case 2");
+        return filterPlainArray(data, filter).sort((a, b) => a.price - b.price);
+      default:
+        console.log("go case 3");
+        filterPlainArray(data, filter);
+    }
+  };
+  const products = handleSort();
+  const productsLength = products.length;
+
+  console.log("products", products);
+
   return (
     <div>
       <Container>
@@ -378,7 +418,9 @@ const ListProduct = () => {
                         <a
                           href="#"
                           className={classes.SortByLink}
-                          onClick={() => handleSortHighLow()}
+                          onClick={() => {
+                            setSort("Price: High-Low");
+                          }}
                         >
                           Price: High-Low
                         </a>
@@ -387,7 +429,7 @@ const ListProduct = () => {
                         <a
                           href="#"
                           className={classes.SortByLink}
-                          onClick={() => handleSortLowHigh()}
+                          onClick={() => setSort("Price: Low-High")}
                         >
                           Price: Low-High
                         </a>
@@ -412,19 +454,36 @@ const ListProduct = () => {
               {/* filter color on the left */}
               <Hidden smDown>
                 {!hideFilter && (
-                  <ListProductFilter handleFilter={handleFilter} />
+                  <ListProductFilter
+                    handleFilter={setTriggerHandlerFilter}
+                    dataFilter={dataFilter}
+                  />
                 )}
               </Hidden>
 
               {!hideFilter && (
                 <Grid item sm={12} md={10}>
                   {/* mobile */}
-                  <ListproductMain data={dataFilter} />
+                  <ListproductMain
+                    filter={filter}
+                    setFilter={setFilter}
+                    open={open}
+                    setOpen={setOpen}
+                    productsLength={productsLength}
+                    data={products}
+                  />
                 </Grid>
               )}
               {hideFilter && (
                 <Grid item xs={12}>
-                  <ListproductMain data={dataFilter} />
+                  <ListproductMain
+                    filter={filter}
+                    setFilter={setFilter}
+                    open={open}
+                    setOpen={setOpen}
+                    productsLength={productsLength}
+                    data={products}
+                  />
                 </Grid>
               )}
             </Grid>

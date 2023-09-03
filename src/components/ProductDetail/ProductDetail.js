@@ -143,26 +143,25 @@ const ProductDetail = (props) => {
               <div>
                 <Box sx={{ display: { sx: "block", md: "none" } }}>
                   <ProductImage detailProduct={detailProduct} index={index} />
-                  <h1>HII</h1>
                 </Box>
-                <Grid container spacing={2}>
-                  <Hidden mdDown>
+                <Box sx={{ display: { sx: "none", md: "block" } }}>
+                  <Grid container spacing={2}>
                     <Grid item sm={12} md={8}>
                       <ProductImage
                         detailProduct={detailProduct}
                         index={index}
                       />
                     </Grid>
-                  </Hidden>
-                  <Grid item sm={12} md={4} sx={{ marginTop: 5 }}>
-                    <ProductMain
-                      detailProduct={detailProduct}
-                      getIndexImg={getIndexImg}
-                      indexPress={index}
-                    />
-                    <ProductMoreDetail />
+                    <Grid item sm={12} md={4} sx={{ marginTop: 5 }}>
+                      <ProductMain
+                        detailProduct={detailProduct}
+                        getIndexImg={getIndexImg}
+                        indexPress={index}
+                      />
+                      <ProductMoreDetail />
+                    </Grid>
                   </Grid>
-                </Grid>
+                </Box>
               </div>
             )}
           </div>

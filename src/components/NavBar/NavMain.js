@@ -9,6 +9,8 @@ import LogoNike from "./NavMainComponents/logoNike";
 import { Divider, makeStyles } from "@material-ui/core";
 import SearchBox from "./NavMainComponents/SearchBox";
 import NavMainFeature from "../NavBar/NavMainComponents/NavMainFeature";
+import { Link } from "react-router-dom";
+import Logo from "../../common/logo";
 const HideOnScroll = (props) => {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
@@ -30,6 +32,7 @@ const useStyles = makeStyles({
 
   toolbar: {
     padding: 0,
+    marginLeft: "40px",
   },
   fallback: {
     position: "fixed",
@@ -47,7 +50,18 @@ const NavMain = (props) => {
       <HideOnScroll {...props}>
         <AppBar className={classes.nav}>
           <Toolbar className={classes.toolbar}>
-            <LogoNike />
+            {/* <Link to="/">
+              <svg
+                className="pre-logo-svg"
+                height="60px"
+                width="60px"
+                fill="#111"
+                viewBox="0 0 69 32"
+              >
+                <path d="M68.56 4L18.4 25.36Q12.16 28 7.92 28q-4.8 0-6.96-3.36-1.36-2.16-.8-5.48t2.96-7.08q2-3.04 6.56-8-1.6 2.56-2.24 5.28-1.2 5.12 2.16 7.52Q11.2 18 14 18q2.24 0 5.04-.72z"></path>
+              </svg>
+            </Link> */}
+            <Logo />
             <NavMainMenu />
             <NavMainFeature />
           </Toolbar>

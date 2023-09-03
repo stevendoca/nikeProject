@@ -1,10 +1,20 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import { Skeleton } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import FilterBarMobile from "./FilterBarMobile";
+import LeftPanel from "./LeftPanel";
+import Listproducts from "./Listproducts";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: "0 48px",
+  },
+  rootLayOut: {
+    width: "80%",
+    margin: "0 auto",
+  },
   ListProductMainContainer: {
     padding: "0 40px",
     [theme.breakpoints.down("sm")]: {
@@ -63,10 +73,95 @@ const useStyles = makeStyles((theme) => ({
   Price: {
     paddingTop: 10,
   },
+  ex: {
+    width: "100%",
+  },
 }));
+
 const ListproductMain = (props) => {
+  const { open, filter, setOpen, setFilter, listProduct, productsLength } =
+    props;
   const classes = useStyles();
   const navigate = useNavigate();
+  const menu = [
+    "Shoes",
+    "Sports Bras",
+    "Tops & T-Shirts",
+    "Hoodies & SweathiAts",
+    "Jackets & Gilets",
+    "Trousers & Tights",
+    "Shorts",
+    "Compression & Baseslayer",
+    "Tracksuits",
+    "Jumpsuits & Rompers",
+    "Skirts & Dresses",
+    "Socks",
+    "Accessories & Equipment",
+  ];
+  const colors = [
+    "purple",
+    "black",
+    "red",
+    "orange",
+    "blue",
+    "white",
+    "brown",
+    "green",
+    "yellow",
+    "grey",
+    "pink",
+  ];
+  const brands = [
+    "Nike Sportswear",
+    "Jordan",
+    "Nike By You",
+    "NikeLab",
+    "ACG",
+    "Nike Pro",
+    "Nike",
+  ];
+  const sports = [
+    "Lifestyle",
+    "Running",
+    "Training & Gym",
+    "Basketball",
+    "American Football",
+    "Football",
+    "Yoga",
+    "Golf",
+    "Skateboarding",
+    "Tenis",
+    "Athlete",
+    "Waking",
+    "Outdoor",
+    "Volleyball",
+    "Hiking",
+    "Dance",
+  ];
+  const athletes = [
+    "LeBron James",
+    "Kevin Durant",
+    "Kyrie Irving",
+    "Paul George",
+    "Tiger Woods",
+    "Cristiano Ronaldo",
+    "Serena Williams",
+    "Rafael Nadal",
+    "Naomi Osaka",
+    "Kylian Mbappe",
+    "RussellWestbrrok",
+    "Carmelo Anthony",
+    "Giannis Antetokounmpo",
+    "Nyjah Huston",
+  ];
+  const bestfor = [
+    "Warm Weather",
+    "Wet Weather Conditions",
+    "Cold Weather",
+    "Low-Impact Activities",
+    "High-Impact Activities",
+  ];
+  const collaborator = ["Patta", "sacai", "Off-White", "Gyakusou"];
   const filterColor = useSelector((state) => state.product.filterColor);
   const filterSize = useSelector((state) => state.product.filterSize);
   const dataSearchInput = useSelector((state) => state.product.dataSearchInput);
@@ -107,77 +202,41 @@ const ListproductMain = (props) => {
 
   return (
     <div>
-      {isLoading ? (
-        <Grid
-          container
-          spacing={2}
-          className={classes.ListProductMainContainer}
-        >
-          {listLazyLoad}
-        </Grid>
-      ) : (
-        <Grid
-          container
-          spacing={2}
-          className={classes.ListProductMainContainer}
-        >
-          {props.data.length === 0 &&
-            (filterColor.length > 0 ||
-              filterSize.length > 0 ||
-              dataSearchInput.length > 0) &&
-            isLoading === false && (
-              <Grid item xs={12}>
-                <div className={classes.ProductNotFound}>
-                  Sorry, we can't find your product
-                </div>
-              </Grid>
-            )}
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        <FilterBarMobile
+          className={classes.ex}
+          filter={filter}
+          setFiltter={setFilter}
+          productsLength={productsLength}
+          colors={colors}
+          brands={brands}
+          sports={sports}
+          bestfor={bestfor}
+          athletes={athletes}
+          collaborator={collaborator}
+          menu={menu}
+        />
+      </Box>
+      <Box sx={{ display: "flex" }} className={classes.root}>
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          {open && (
+            <LeftPanel
+              filter={filter}
+              setFilter={setFilter}
+              menu={menu}
+              colors={colors}
+              open={open}
+              brands={brands}
+              sports={sports}
+              athletes={athletes}
+              bestfor={bestfor}
+              collaborator={collaborator}
+            />
+          )}
+        </Box>
 
-          {props.data.map((item, index) => {
-            if (item.status === 1) {
-              return (
-                <Grid item xs={6} md={4} key={index}>
-                  <span className={classes.ProductLink}>
-                    <img
-                      className={classes.ProductImage}
-                      src={imgURL.index === index ? imgURL.URL : item.img}
-                      onClick={() => {
-                        navigate(`/detailproduct/${item._id}`);
-                      }}
-                      alt="specific item img"
-                    />
-                    <div className={classes.Message}></div>
-                    <div className={classes.ProductDetailColorway}>
-                      <div className={classes.ProductName}>{item.name}</div>
-                      <div className={classes.ProductType}>
-                        <div>{item.message}</div>
-                        <div>{item.color} Color</div>
-                      </div>
-                    </div>
-                    <div className={classes.ProductColorway}>
-                      {item.imgDetails.map((item1, index) => {
-                        return (
-                          <img
-                            key={index}
-                            className={classes.ProductColorwayImage}
-                            src={item1.imgs[0].img}
-                            onMouseOver={() =>
-                              setImgURL({ URL: item1.imgs[0].img, index })
-                            }
-                          />
-                        );
-                      })}
-                    </div>
-                    <div className={classes.Price}>
-                      {item.price.toLocaleString()}d
-                    </div>
-                  </span>
-                </Grid>
-              );
-            }
-          })}
-        </Grid>
-      )}
+        <Listproducts listProduct={listProduct} />
+      </Box>
     </div>
   );
 };

@@ -38,6 +38,9 @@ export const productSlice = createSlice({
     filterColorData: (state, action) => {
       state.dataFilter = action.payload;
     },
+    filterData: (state, action) => {
+      state.dataFilter = action.payload;
+    },
     filterColorHandler: (state, action) => {
       state.filterColor = action.payload;
     },
@@ -76,6 +79,7 @@ export const {
   filterColorHandler,
   filterSizeHandler,
   sortData,
+  filterData,
   dataSearchInput,
   sortByTitleReducer,
 } = productSlice.actions;

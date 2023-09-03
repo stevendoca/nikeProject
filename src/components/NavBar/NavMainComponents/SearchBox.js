@@ -175,13 +175,11 @@ const SearchBox = () => {
         dispatch(isLoadingListProduct(true));
         const res = await API(`product`, "GET");
         dataAll = res.data;
-        console.log("before");
         dispatch(testing("ok"));
         dispatch(getAllData(res.data));
         dispatch(search(dataSearchList));
         dispatch(suggest(dataSuggest));
         dispatch(isLoadingListProduct(false));
-        console.log("abc");
       } catch (e) {
         console.log(e);
       }
@@ -217,7 +215,7 @@ const SearchBox = () => {
           xs={2}
           className={classes.SearchProduct}
           onClick={() => {
-            navigate(`/detailProduct/${item._id}`);
+            navigate(`/detail/${item._id}`);
             closeXSearchBox();
             closeFallBack();
           }}
@@ -255,8 +253,10 @@ const SearchBox = () => {
   const handleSubmitSearch = (e, data) => {
     e.preventDefault();
     let dataInput;
+    console.log("data", data);
     if (data !== undefined) {
       dataInput = data;
+      console.log("go here");
     } else {
       dataInput = e.target.searchbar.value;
     }

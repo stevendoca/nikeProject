@@ -115,7 +115,7 @@ const MerchMenu = () => {
             {merch?.map((item, key) => {
               return (
                 <Grid key={key} item sm={3}>
-                  <MenuTitle>{item.heading}hi</MenuTitle>
+                  <MenuTitle>{item.heading}</MenuTitle>
                   <MenuItem>
                     <MenuItemStyles>{item.title1}</MenuItemStyles>
                   </MenuItem>

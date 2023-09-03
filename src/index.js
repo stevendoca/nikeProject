@@ -8,16 +8,27 @@ import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./redux/reducers/reducer";
 import { store } from "./app/store";
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // const store = createStore(
 //   rootReducer,
 //   composeEnhancers(applyMiddleware(thunk))
 // );
-
+const theme = createTheme();
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <StyledEngineProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+    ,
+  </StyledEngineProvider>,
+
   document.getElementById("root")
 );
 

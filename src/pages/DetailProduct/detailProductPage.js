@@ -9,9 +9,7 @@ const DetailProductPage = () => {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container>
-        <ProductDetail id={id} />
-      </Container>
+      <ProductDetail id={id} />
       <Footer />
     </React.Fragment>
   );

@@ -12,6 +12,16 @@ import PayPal from "../Paypal/paypal";
 import API from "../../Axios/API";
 import { resetCart } from "../../features/cart/cartSlice";
 const useStyles = makeStyles({
+  root: {
+    padding: "0 20px",
+    display: "flex",
+    maxWidth: "1100px",
+    margin: "40px auto 0",
+  },
+  topTitle: {
+    fontSize: "22px",
+    fontWeight: "normal",
+  },
   Container: {
     margin: "40px 0",
   },
@@ -197,15 +207,23 @@ const Cart = (props) => {
   };
   return (
     <div className={classes.Container}>
-      <Container maxWidth="xl">
+      <div className={classes.root}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={8}>
+            <h4 className={classes.topTitle}>Bag</h4>
+            <CartBag />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <CartSummary />
+          </Grid>
+        </Grid>
+      </div>
+
+      {/* <Container maxWidth="xl">
         <div className={classes.Cart}>
           <Hidden mdUp>
             <div className={classes.BagMobile}>
               <div className={classes.Bag}>Bag</div>
-              <div>
-                <span className={classes.NumberItems}> 2 Items | </span>{" "}
-                {sumMoney.toLocaleString()}d
-              </div>
             </div>
           </Hidden>
           <Grid container spacing={2}>
@@ -216,7 +234,7 @@ const Cart = (props) => {
                     className={classes.CloseIcon}
                     onClick={() => setPromodeCode(!PromoCode)}
                   >
-                    CloseIcon
+                    CloseIcons
                   </div>
                   <div className={classes.PromoCodeTitle}>
                     HAVE A PROMO CODE?
@@ -236,21 +254,20 @@ const Cart = (props) => {
               <CartSummary />
             </Grid>
           </Grid>
-          <CartFavourite />
         </div>
-      </Container>
+      </Container> */}
       {/* Check Out Button Mobile */}
       <Hidden mdUp>
-        <div className={classes.CheckoutMobileContainer}>
+        {/* <div className={classes.CheckoutMobileContainer}>
           <div style={{ margin: "0 12px" }}>
             <button
               className={classes.CheckoutButton}
               onClick={() => checkOutHandler()}
             >
-              Go to Checkout
+              Go to Checkouts
             </button>
           </div>
-        </div>
+        </div> */}
         <Drawer
           container={container}
           variant="temporary"

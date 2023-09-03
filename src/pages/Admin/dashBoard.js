@@ -58,7 +58,7 @@ const Dashboard = () => {
                     <Deposit />
                   </Paper>
                 </Grid>
-                <Grid item xs={!2} sx={{ mb: 50 }}>
+                <Grid item xs={!2} style={{ marginBottom: 50 }}>
                   <Paper className={classes.paper}>
                     <Order />
                   </Paper>

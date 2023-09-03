@@ -139,6 +139,22 @@ const useStyles = makeStyles((theme) => ({
     border: "none",
     outline: "none",
   },
+  sizeItem: {
+    height: "48px",
+    backgroundColor: "#fff",
+    borderRadius: "5px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxShadow: "rgb(229 229 229) 0px 0px 0px 1px",
+    cursor: "pointer",
+    "&:hover": {
+      boxShadow: "rgb(17 17 17) 0px 0px 0px 1px inset",
+    },
+    "&.active": {
+      boxShadow: "rgb(17 17 17) 0px 0px 0px 1px inset",
+    },
+  },
 }));
 const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
   const classes = useStyles();
@@ -231,7 +247,7 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
     }
   };
   const listSize = detailProduct.sizes.map((item, index) => (
-    <Grid item xs={4} key={index}>
+    <Grid item xs={2} key={index}>
       <label>
         <input
           type="radio"
@@ -242,9 +258,9 @@ const ProductMain = ({ detailProduct, getIndexImg, indexPress }) => {
           onBlur={checkSize}
         />
         <div
-          className={
-            size === item.size ? classes.SizeLabelChecked : classes.SizeLabel
-          }
+          className={`${classes.sizeItem} ${
+            size === item.size ? "active" : ""
+          }`}
         >
           {item.size}
         </div>

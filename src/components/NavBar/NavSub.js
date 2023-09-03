@@ -85,7 +85,7 @@ const NavSub = () => {
   const classes = useStyles();
   const [helpMenu, setHelpMenu] = useState(false);
   return (
-    <AppBar className={classes.nav} id="navsub">
+    <div className={classes.nav} id="navsub">
       <Toolbar className={classes.toolbar}>
         <a href="#a" id="jordan" className={classes.linkLogoNavSub}>
           <svg height="24px" width="24px" fill="#111" viewBox="0 0 26 32">
@@ -125,7 +125,7 @@ const NavSub = () => {
           <SignIn />
         </div>
       </Toolbar>
-    </AppBar>
+    </div>
   );
 };
 

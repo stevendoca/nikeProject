@@ -13,7 +13,7 @@ import {
   checkDuplicateAndReturnIndex,
   notifyError,
 } from "../../../utils/utils";
-import { FormControl, NativeSelect } from "@material-ui/core";
+import { Divider, FormControl, NativeSelect } from "@material-ui/core";
 import API from "../../../Axios/API";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,18 +28,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "24px 8px",
     borderBottom: "1px #cccccc solid",
   },
-  ProductImageContainer: {
-    paddingRight: 16,
-  },
-  ProductImage: {
-    width: 150,
-    height: 150,
-    marginRight: 10,
-    // [theme.breakpoints.down("xs")]: {
-    //   width: 80,
-    //   height: 80,
-    // },
-  },
+
   ProductDetail: {
     width: "100%",
     lineHeight: 1.75,
@@ -65,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   SelectFormControl: {
-    marginRight: 10,
+    paddingLeft: 10,
   },
   CartItemAction: {
     marginTop: 16,
@@ -99,6 +88,42 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  cardProduct: {
+    paddingTop: "30px",
+    display: "flex",
+    "& img": {
+      width: "150px",
+      aspectRatio: "1/1",
+      marginRight: "30px",
+      marginBottom: "30px",
+      [theme.breakpoints.down("md")]: {
+        marginRight: "10px",
+        width: "100px",
+        height: "100px",
+      },
+    },
+    "& > div": {
+      "& p:nth-child(2)": {
+        color: "#7e7e7e",
+        textTransform: "capitalize",
+      },
+      "& p:nth-child(3)": {
+        color: "#7e7e7e",
+        textTransform: "capitalize",
+      },
+    },
+  },
+  flex: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  root: {
+    padding: "0 20px",
+    display: "flex",
+    maxWidth: "1100px",
+    margin: "40px auto 0",
+  },
 }));
 const CustomSelect = withStyles((theme) => ({
   input: {
@@ -110,6 +135,9 @@ const CustomSelect = withStyles((theme) => ({
 }))(InputBase);
 const CartBag = () => {
   const products = useSelector((state) => state.cart.products);
+  const sumMoney = products.reduce((sum, item) => {
+    return sum + item.quantity * item.price;
+  }, 0);
   const quantity = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const [itemProduct, setItemProduct] = useState("");
   const classes = useStyles();
@@ -181,77 +209,75 @@ const CartBag = () => {
     localStorage.setItem("cart", JSON.stringify(products));
   }, [products]);
   return (
-    <div className={classes.CartBag}>
+    <div>
+      {products.length === 0 && <h5>There are no items in your bag</h5>}
       {products &&
         products.map((item, key) => {
           return (
-            <div className={classes.Product} key={key}>
-              <a href="#" className={classes.ProductImageContainer}>
-                <img className={classes.ProductImage} src={item.img} />
+            <div className={classes.cardProduct} key={key}>
+              <a href="#">
+                <img src={item.img} />
               </a>
-              <div className={classes.ProductDetail}>
-                <a href="#" className={classes.ProductName}>
-                  {item.name}
-                </a>
-                <div className={classes.Price}>
-                  {item.price.toLocaleString()}d
-                </div>
-                <div className={classes.SubDetail}>
-                  <div>Men's Shoes</div>
-                  <div>White/Black/Cosmic Clay/White</div>
-                  <div className={classes.SelectContainer}>
-                    <span className={classes.SelectFormContainer}>
-                      size
-                      <FormControl className={classes.SelectFormControl}>
-                        <NativeSelect
-                          value={item.size}
-                          input={
-                            <CustomSelect
-                              onChange={handleChangeSize}
-                              onClick={() => {
-                                setItemProduct(item);
-                              }}
-                            />
-                          }
-                        >
-                          {" "}
-                          {item.sizes.map((i, key) => {
-                            return (
-                              <option value={i.size} key={key}>
-                                {i.size}
-                              </option>
-                            );
-                          })}
-                        </NativeSelect>
-                      </FormControl>
-                    </span>
-                    <span className={classes.SelectContainer}>
-                      Quantity
-                      <FormControl className={classes.SelectFormControl}>
-                        <NativeSelect
-                          value={item.quantity}
-                          input={
-                            <CustomSelect
-                              onChange={handleChangeQuantity}
-                              onClick={() => {
-                                setItemProduct(item);
-                              }}
-                            />
-                          }
-                        >
-                          {quantity.map((i, key) => {
-                            return (
-                              <option value={i} key={key}>
-                                {i}
-                              </option>
-                            );
-                          })}
-                        </NativeSelect>
-                      </FormControl>
-                    </span>
+              <div className={classes.flex}>
+                <div>
+                  <p>{item.name}</p>
+                  <div className={classes.SubDetail}>
+                    <p>{item.gender}</p>
+                    <p>{item.typeProduct}</p>
+                    <p>{item.color}</p>
+
+                    <div className={classes.SelectContainer}>
+                      <span className={classes.SelectFormContainer}>
+                        Size
+                        <FormControl className={classes.SelectFormControl}>
+                          <NativeSelect
+                            value={item.size}
+                            input={
+                              <CustomSelect
+                                onChange={handleChangeSize}
+                                onClick={() => {
+                                  setItemProduct(item);
+                                }}
+                              />
+                            }
+                          >
+                            {" "}
+                            {item.sizes.map((i, key) => {
+                              return (
+                                <option value={i.size} key={key}>
+                                  {i.size}
+                                </option>
+                              );
+                            })}
+                          </NativeSelect>
+                        </FormControl>
+                      </span>
+                      <span className={classes.SelectContainer}>
+                        Quantity
+                        <FormControl className={classes.SelectFormControl}>
+                          <NativeSelect
+                            value={item.quantity}
+                            input={
+                              <CustomSelect
+                                onChange={handleChangeQuantity}
+                                onClick={() => {
+                                  setItemProduct(item);
+                                }}
+                              />
+                            }
+                          >
+                            {quantity.map((i, key) => {
+                              return (
+                                <option value={i} key={key}>
+                                  {i}
+                                </option>
+                              );
+                            })}
+                          </NativeSelect>
+                        </FormControl>
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <Hidden xsDown>
                   <div className={classes.CartItemAction}>
                     <span
                       className={classes.CartItemActionButton}
@@ -266,7 +292,7 @@ const CartBag = () => {
                         postFavouriteCart();
                       }}
                     >
-                      Move to Favourites
+                      Move to Favourite
                     </span>
                     <span
                       className={classes.CartItemActionButton}
@@ -277,19 +303,15 @@ const CartBag = () => {
                       Remove
                     </span>
                   </div>
-                </Hidden>
-                <Hidden smUp>
-                  <button
-                    className={classes.MoreOptionsMobile}
-                    onClick={openMoreOption}
-                  >
-                    More Options
-                  </button>
-                </Hidden>
+                </div>
+                {/* <div>{item.price.toLocaleString()}d</div> */}
+
+                <div>{(item.price * item.quantity).toLocaleString()}</div>
               </div>
             </div>
           );
         })}
+      <Divider />
     </div>
   );
 };

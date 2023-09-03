@@ -172,6 +172,7 @@ const useStyles = makeStyles((theme) => ({
   },
   nonMobile: {
     display: "flex",
+    backgroundColor: "f5f5f5",
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
@@ -207,6 +208,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 30,
     width: 155,
     marginRight: 20,
+    backgroundColor: "#f5f5f5",
     "&:hover": {
       backgroundColor: "#dee1e3",
     },
@@ -289,6 +291,7 @@ const NavMainFeature = (props) => {
 
   const openFallBack = () => {
     let fallBack = document.getElementById("fallback");
+    console.log("fallback", fallBack);
     ReactDOM.findDOMNode(fallBack).style.backgroundColor = "rgba(0,0,0,0.4)";
     ReactDOM.findDOMNode(fallBack).style.zIndex = "2";
     let navSub = document.getElementById("navsub");
@@ -388,8 +391,11 @@ const NavMainFeature = (props) => {
   const handleSubmitSearch = (e, data) => {
     e.preventDefault();
     let dataInput;
+    console.log("go handleSubmit");
+    console.log("data", data);
 
     if (data !== undefined) {
+      console.log("go here");
       dataInput = data;
     } else {
       dataInput = e.target.searchbar.value;
@@ -412,7 +418,13 @@ const NavMainFeature = (props) => {
   return (
     <div className={classes.navMainFeature}>
       <span className={classes.nonMobile}>
-        <div className={classes.inputBar}>
+        <div
+          className={classes.inputBar}
+          onClick={() => {
+            openSearchBox();
+            openFallBack();
+          }}
+        >
           <IconButton className={classes.mainNavButton}>
             <SearchIcon style={{ fill: "black" }} />
           </IconButton>
@@ -420,10 +432,6 @@ const NavMainFeature = (props) => {
             className={classes.input}
             placeholder="Search"
             inputProps={{ "aria-label": "search" }}
-            onClick={() => {
-              openSearchBox();
-              openFallBack();
-            }}
           />
         </div>
 

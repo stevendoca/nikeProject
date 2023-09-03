@@ -132,7 +132,7 @@ const CartSummary = () => {
   const [openHelp, setOpenHelp] = useState(false);
   const [checkOutStatus, setCheckOutStatus] = useState(false);
   const products = useSelector((state) => state.cart.products);
-
+  console.log("products", products);
   const dispatch = useDispatch();
   const history = useNavigate();
 

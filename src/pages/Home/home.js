@@ -13,11 +13,15 @@ const HomePage = () => {
   const getProductAPIHandler = async (gender, typeProduct) => {
     try {
       dispatch(isLoadingListProduct, true);
+      // const res = await API(
+      //   `product/?gender=${gender}&typeProduct=${typeProduct}`,
+      //   "GET"
+      // );
       const res = await API(
         `product/?gender=${gender}&typeProduct=${typeProduct}`,
         "GET"
       );
-
+      console.log("res data", res);
       dispatch(fetchAPIListProduct(res.data));
       dispatch(isLoadingListProduct(false));
       localStorage.setItem(
